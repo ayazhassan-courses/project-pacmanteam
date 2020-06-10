@@ -1,10 +1,8 @@
 import pygame, sys
+from settings import *
 
 pygame.init()
 v = pygame.math.Vector2
-
-w,h= 560, 620
-FPS = 60
 
 class Game: 
     def __init__(self):
@@ -13,11 +11,9 @@ class Game:
         self.state = 'intro'
         self.clock = pygame.time.Clock()
         self.load()
+        self.cell_width = w//28
+        self.cell_height = h//30
 
-    def load(self):
-        self.background = pygame.image.load('maze.jpg')
-        self.background = pygame.transform.scale(self.background, (w,h))
-    
     def run(self):
         while self.game_on:
             if self.state == 'intro':
@@ -33,7 +29,27 @@ class Game:
         pygame.quit()
         sys.exit()
 
+
+
+#############helper_functions############################
+
+    def load(self):
+        self.background = pygame.image.load('maze2.png')
+        self.background = pygame.transform.scale(self.background, (w,h))
+
+    def t(self, text, screen, color, fonttype, size, pos):
+        f = pygame.font.SysFont(fonttype, size)
+        T = f.render(text, False, color)
+        screen.blit(T, pos)
+
+    def grid(self):
+        for i in range(w//(self.cell_width)):
+            pygame.draw.line(self.screen,GREY, ((i*self.cell_width),0),((i*self.cell_width),h))
+        for i in range(h//(self.cell_height)):
+            pygame.draw.line(self.screen,GREY, (0,(i*self.cell_height)),(w,(i*self.cell_height)))   
             
+            
+#############start_functions############################
     def start_game(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -46,13 +62,7 @@ class Game:
         self.t('PRESS SPACE BAR TO CONTINUE', self.screen, (255,255,255), 'arial', 22, ((w//2-90, h//2)))
         pygame.display.update()
 
-
-
-    def t(self, text, screen, color, fonttype, size, pos):
-        f = pygame.font.SysFont(fonttype, size)
-        T = f.render(text, False, color)
-        screen.blit(T, pos)    
-
+#############playing_functions############################
     def play_game(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -60,7 +70,6 @@ class Game:
 
     def play_drawing(self):
         self.screen.blit(self.background, (0,0))
-##        for x in range(w//28):
-##            pygame.draw.line((x*))
+        self.grid()
         pygame.display.update()
         
