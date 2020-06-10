@@ -1,13 +1,18 @@
-#screen settings
-width, height = 448, 596
+# settings.py
+
+from pygame.math import Vector2 as vec
+
+# screen settings
+WIDTH, HEIGHT = 560, 620
 FPS = 60
 
+# colour settings
+BLACK = (0, 0, 0)
+RED = (208, 22, 22)
+GREY = (107, 107, 107)
+PLAYER_COLOUR = (190, 194, 15)
 
-#colour settings
-BLACK = (0,0,0)
-RED = (200,22,22)
+# player settings
+PLAYER_START_POS = vec(1, 1)
 
-#font settings
-START_TEXT_SIZE = 16
-START_FONT = 'arial black'
-#player settings
+# mob settings
