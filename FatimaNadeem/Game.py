@@ -11,6 +11,8 @@ class Game:
 		self.running = True
 		self.state =  "start"
 		
+		# calling load function - FATIMA
+
 		self.cellWidth = WIDTH // 28
 		self.cellHeight = HEIGHT // 30
 
