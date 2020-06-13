@@ -10,9 +10,8 @@ class Game:
 		self.clock = pygame.time.Clock()
 		self.running = True
 		self.state =  "start"
+		self.Load()
 		
-		# calling load function - FATIMA
-
 		self.cellWidth = WIDTH // 28
 		self.cellHeight = HEIGHT // 30
 
@@ -40,8 +39,14 @@ class Game:
 
 	######################### HELPER FUNCTIONS ###########################
 
-	# Load(self) - FATIMA
-	# Text(..) - FATIMA
+    def Load(self):
+        self.background = pygame.image.load('maze2.png')
+        self.background = pygame.transform.scale(self.background, (WIDTH, HEIGHT))
+
+    def Text(self, text, screen, color, fonttype, size, pos):
+        font = pygame.font.SysFont(fonttype, size)
+        introText = font.render(text, False, color)
+        screen.blit(introText, pos)	
 
 	def DrawGrid(self):
 		for x in range (WIDTH // self.cellWidth):
@@ -63,7 +68,7 @@ class Game:
 	
 	def StartDraw(self):
 		self.screen.fill(BLACK)
-		# press space bar line - FATIMA
+		self.Text('PRESS SPACE BAR TO CONTINUE', self.screen, WHITE, 'arial', 22, ((WIDTH//2-90, HEIGHT//2)))
 		pygame.display.update()
 
 	######################### PLAYING FUNCTIONS ##########################
@@ -88,7 +93,7 @@ class Game:
 		# updating them - ARIBA
 
 	def PlayingDraw(self):
-		self.screen.fill(BLACK) # change for maze - FATIMA
+		self.screen.blit(self.background, (0,0) # change for maze - FATIMA
 		self.DrawGrid()
 		self.player.Draw() 
 		# looping over enemies and - ARIBA
