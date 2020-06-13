@@ -1,4 +1,4 @@
-# settings.py
+# Settings.py
 
 from pygame.math import Vector2 as vec
 

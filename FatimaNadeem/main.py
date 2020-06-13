@@ -1,8 +1,6 @@
 # main.py
-from app_class import *
+from Game import *
 
 if (__name__ == "__main__"):
-	app = App()
-	app.Run()
-
-answer = input("wrong")
+	app = Game();
+	app.Run();
