@@ -93,7 +93,7 @@ class Game:
 		# updating them - ARIBA
 
 	def PlayingDraw(self):
-		self.screen.blit(self.background, (0,0) # change for maze - FATIMA
+		self.screen.blit(self.background, (0,0)) # change for maze - FATIMA
 		self.DrawGrid()
 		self.player.Draw() 
 		# looping over enemies and - ARIBA
