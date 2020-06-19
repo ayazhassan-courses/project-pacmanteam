@@ -11,18 +11,12 @@ class Game:
 		self.clock = pygame.time.Clock()
 		self.running = True
 		self.state =  "start"
+		self.Load()
 
 		self.cellWidth = WIDTH // 28
-		self.cellHeight = HEIGHT // 31
-
-		self.cellWidthHalf = self.cellWidth // 2
-		self.cellHeightHalf = self.cellHeight // 2 
+		self.cellHeight = HEIGHT // 30
 
 		self.player = Player(self, PLAYER_START_POS)
-
-		self.walls = []
-
-		self.Load()
 		# enemies list - ARIBA
 		# enemies position list - ARIBA
 		# calling make enemies function - ARIBA
@@ -48,27 +42,18 @@ class Game:
 
 	def Load(self):
 		self.background = pygame.image.load('maze2.png')
-		self.background = pygame.transform.scale(self.background, (WIDTH, HEIGHT)) # To fatima: You don't actually need this line
-		
-		with open("Maps.txt", 'r') as file:
-			for y, line in enumerate(file):
-				for x, char in enumerate(line):
-					if (char == '1'):
-						self.walls.append(vec(x, y))
+		self.background = pygame.transform.scale(self.background, (WIDTH, HEIGHT))
 	
 	def Text(self, text, screen, color, fonttype, size, pos):
 		font = pygame.font.SysFont(fonttype, size)
 		introText = font.render(text, False, color)
 		screen.blit(introText, pos)
 
-	def DrawGuides(self):
+	def DrawGrid(self):
 		for x in range (WIDTH // self.cellWidth):
 			pygame.draw.line(self.screen, GREY, (x * self.cellWidth, 0), (x * self.cellWidth, HEIGHT))
 		for y in range (HEIGHT // self.cellHeight):
 			pygame.draw.line(self.screen, GREY, (0, y * self.cellHeight), (WIDTH, y * self.cellHeight)) 
-
-		# for wall in self.walls:
-		# 	pygame.draw.rect(self.screen, PURPLE, (int(wall.x * self.cellWidth), int(wall.y * self.cellHeight), self.cellWidth, self.cellHeight))
 
 	########################## INTRO FUNCTIONS ###########################
 
@@ -110,7 +95,7 @@ class Game:
 
 	def PlayingDraw(self):
 		self.screen.blit(self.background, (0,0))
-		self.DrawGuides()
+		self.DrawGrid()
 		self.player.Draw() 
 		# looping over enemies and - ARIBA
 		# drawing them - ARIBA
