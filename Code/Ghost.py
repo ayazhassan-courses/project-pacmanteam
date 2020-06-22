@@ -19,10 +19,7 @@ class Ghost:
         self.direction = vec(1,0)
         self.personality = self.setPersonality()
         self.state = 'static'
-
-        ##################### variables i dont need but he made them ######
-        # self.radius = int(self.app.cellwidth//2.3)
-
+        
     def Update(self):
         self.state = 'running'
         if self.state == 'running':
@@ -32,7 +29,7 @@ class Ghost:
             #all the walls will be set to a high number and the rest to infinity. only the starting position of the enemy will be initialized to have a distance of 0
             # in a loop, it will be calculated how far away each cell is from our source (starting pos) and their distances updated from infinity
             # once all distances are set, a path for djisktra is obtained which can be found from backtracking from pacman position to enemy position.
-            #coordinates for a cell is right after the enemy position in the path will be passed from this algorithm back to update.
+            #coordinates for a cell right after the enemy position in the path's list will be passed from this algorithm back to update function.
     def Draw(self):
         # pygame.draw.circle(self.game.screen,(232, 14, 100), (int(self.pixel_pos.x), int(self.pixel_pos.y)), 16)
         self.game.screen.blit(self.ghostImg, (self.pixel_pos.x, self.pixel_pos.y))
