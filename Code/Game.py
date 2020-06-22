@@ -56,8 +56,7 @@ class Game:
 					elif (char in ['2', '3', '4', '5']):
                         			self.ghostpos.append(vec(x, y))
                     			elif char == 'B':
-                        			pygame.draw.rect(self.background, BLACK, (x * self.cellWidth, y * self.cellHeight,
-                                                                  self.cellWidth, self.cellHeight))
+                        			pygame.draw.rect(self.background, BLACK, (x * self.cellWidth, y * self.cellHeight,self.cellWidth, self.cellHeight))
 
 
 	def make_ghosts(self):
