@@ -30,6 +30,50 @@ class Ghost:
             # in a loop, it will be calculated how far away each cell is from our source (starting pos) and their distances updated from infinity
             # once all distances are set, a path for djisktra is obtained which can be found from backtracking from pacman position to enemy position.
             #coordinates for a cell right after the enemy position in the path's list will be passed from this algorithm back to update function.
+            
+            #my code as of yet
+            ##
+##import pygame, math
+##
+##def prac(s,t):
+##    grid = [[0 for x in range(28)] for x in range(30)]
+##        for cell in self.app.walls:
+##            if cell.x < 28 and cell.y < 30:
+##                grid[int(cell.y)][int(cell.x)] = 1
+##
+##    v=[]
+##    dg = [[math.inf for x in range(28)] for x in range(30)]
+##        for cell in self.app.walls:
+##            if cell.x < 28 and cell.y < 30:
+##                dg[int(cell.y)][int(cell.x)] = 9999
+##    dg[s[0]][s[1]]=0
+##    #some condition:
+##        e=[]
+##        i=9999
+##        x,y=0,0
+##        for k in range(len(dg)):
+##            for j in range(len(dg[k])):
+##                if min(dg[k][j])<i:
+##                    i=min(dg[k][j])
+##                    x,y=j,k
+##                    
+##        e.append([i,x,y])
+##        #find min in dg
+##        #remove min from q and push min in visited
+##        a=min(e)
+##        v.append(a)
+##        b1=[0,1],[0,-1],[1,0],[-1,0]
+##        #check distances to the left, right, up and down of min which are
+##    # pos and not walls and in grid, if  min's d +1 is lesser than their
+##    #current d then update value in dg
+##        for b in b1:
+##            ##a=[0,2,3]        b=[0,1]
+##            if (a[1]+b[0]) >=0 and (a[2] +b[1]) >=0 and (a[2] +b[1]) < len(dg) and (a[1] +b[0]) < len(dg[0]):
+##                c=[(a[1]+b[0]),]
+##                if a[0]+1<
+
+            
+            
     def Draw(self):
         # pygame.draw.circle(self.game.screen,(232, 14, 100), (int(self.pixel_pos.x), int(self.pixel_pos.y)), 16)
         self.game.screen.blit(self.ghostImg, (self.pixel_pos.x, self.pixel_pos.y))
