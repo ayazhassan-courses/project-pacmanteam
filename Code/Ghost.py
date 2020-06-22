@@ -38,10 +38,6 @@ class Ghost:
         return vec((self.starting_pos.x * self.game.cellWidth),
                    (self.starting_pos.y * self.game.cellHeight))
 
-        # original
-        # return vec((self.starting_pos.x * self.game.cellWidth) + self.game.cellWidthHalf,
-        #           (self.starting_pos.y * self.game.cellHeight) + self.game.cellHeightHalf)
-
     def create_Img(self):
         if self.number == 0:
             return pygame.image.load('ghost1.png')
