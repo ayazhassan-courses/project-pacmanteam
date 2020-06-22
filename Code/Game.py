@@ -21,10 +21,10 @@ class Game:
 		self.player = Player(self, PLAYER_START_POS)
 
 		self.walls = []
-		self.enemies = []
+		self.ghosts = []
 		self.ghostpos = []
 		self.Load()
-		self.make_enemies()
+		self.make_ghosts()
 
 	def Run(self):
 		while self.running:
@@ -57,12 +57,13 @@ class Game:
                         			self.ghostpos.append(vec(x, y))
                     			elif char == 'B':
                         			pygame.draw.rect(self.background, BLACK, (x * self.cellWidth, y * self.cellHeight,
-                                                                 self.cellWidth, self.cellHeight))
+                                                                  self.cellWidth, self.cellHeight))
 
-	def make_enemies(self):
+
+	def make_ghosts(self):
         	for index, pos in enumerate(self.ghostpos):
-            		self.enemies.append(Ghost(self, pos, index)) # add the Ghost class as elements into the enemies list
-    
+            		self.ghosts.append(Ghost(self, pos, index))  # add the Ghost class as elements into the ghosts list
+
 	def Text(self, text, screen, color, fonttype, size, pos):
 		font = pygame.font.SysFont(fonttype, size)
 		introText = font.render(text, False, color)
@@ -110,19 +111,15 @@ class Game:
 				if (event.key == pygame.K_DOWN):
 					self.player.Move(vec(0, 1))
 
-	def PlayingUpdate(self):
-		for ghost in self.enemies:
-            		ghost.Update()
-		self.player.Update()
-		# looping over enemies and - ARIBA
-		# updating them - ARIBA
-
 	def PlayingDraw(self):
 		self.screen.blit(self.background, (0,0))
 		self.DrawGuides()
 		self.player.Draw() 
-		# looping over enemies and - ARIBA
-		# drawing them - ARIBA
-		for ghost in self.enemies:
+		for ghost in self.ghosts:
             		ghost.Draw()
 		pygame.display.update()
+		
+	def PlayingUpdate(self):
+		for ghost in self.ghosts:
+            		ghost.Update()
+		self.player.Update()
