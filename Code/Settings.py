@@ -19,6 +19,3 @@ PLAYER_START_POS = vec(1, 1)
 
 # mob settings
 
-# enemy settings
-ENEMY_START_POS = vec(70,70)
-
