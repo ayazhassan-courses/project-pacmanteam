@@ -3,7 +3,7 @@
 import pygame, sys
 from Settings import *
 from Player import *
-# importing from enemy file - ARIBA
+from Ghost import * 
 
 class Game:
 	def __init__(self):
@@ -21,12 +21,10 @@ class Game:
 		self.player = Player(self, PLAYER_START_POS)
 
 		self.walls = []
-
+		self.enemies = []
+		self.ghostpos = []
 		self.Load()
-		# enemies list - ARIBA
-		# enemies position list - ARIBA
-		# calling make enemies function - ARIBA
-
+		self.make_enemies()
 
 	def Run(self):
 		while self.running:
@@ -55,7 +53,16 @@ class Game:
 				for x, char in enumerate(line):
 					if (char == '1'):
 						self.walls.append(vec(x, y))
-	
+					elif (char in ['2', '3', '4', '5']):
+                        			self.ghostpos.append(vec(x, y))
+                    			elif char == 'B':
+                        			pygame.draw.rect(self.background, BLACK, (x * self.cellWidth, y * self.cellHeight,
+                                                                 self.cellWidth, self.cellHeight))
+
+	def make_enemies(self):
+        	for index, pos in enumerate(self.ghostpos):
+            		self.enemies.append(Ghost(self, pos, index)) # add the Ghost class as elements into the enemies list
+    
 	def Text(self, text, screen, color, fonttype, size, pos):
 		font = pygame.font.SysFont(fonttype, size)
 		introText = font.render(text, False, color)
@@ -104,6 +111,8 @@ class Game:
 					self.player.Move(vec(0, 1))
 
 	def PlayingUpdate(self):
+		for ghost in self.enemies:
+            		ghost.Update()
 		self.player.Update()
 		# looping over enemies and - ARIBA
 		# updating them - ARIBA
@@ -114,7 +123,6 @@ class Game:
 		self.player.Draw() 
 		# looping over enemies and - ARIBA
 		# drawing them - ARIBA
+		for ghost in self.enemies:
+            		ghost.Draw()
 		pygame.display.update()
-
-
-	# make enemies function - ARIBA
