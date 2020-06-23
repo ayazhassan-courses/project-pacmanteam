@@ -88,65 +88,71 @@ class Ghost:
     
     def move(self, target):
         path = self.Djisktra([int(self.starting_pos.x), int(self.starting_pos.y)],[int(target[0]),int(target[1])])
-        #print([int(self.starting_pos.x), int(self.starting_pos.y)])
-        x_dir=  path[1][0] - self.starting_pos.x
-        y_dir=  path[1][1] - self.starting_pos.y         
-        return vec(x_dir, y_dir)
-    
-    def Djisktra(self,start,target):
-        distance_grid = [[math.inf for x in range(28)] for x in range(30)]
+        p_x=  path[1][0] - self.starting_pos.x
+        p_y=  path[1][1] - self.starting_pos.y 
+        #print(vec(p_x, p_y))
+        return vec(p_x, p_y)
+
+    def Djisktra(self,s,t):
+    ##    grid = [[0 for x in range(28)] for x in range(30)]
+    ##        for cell in self.game.walls:
+    ##            if cell.x < 28 and cell.y < 30:
+    ##                grid[int(cell.y)][int(cell.x)] = 1
+
+        dg = [[math.inf for x in range(28)] for x in range(30)]
         for cell in self.game.walls:
             if cell.x < 28 and cell.y < 30:
-                #print([int(cell.y), int(cell.x)])
-                distance_grid[int(cell.y)][int(cell.x)] = 9999
-       # print(self.game.walls)        
-        distance_grid[start[1]][start[0]]=0
+                dg[int(cell.y)][int(cell.x)] = 9999
 
-        visited=[]
+        dg[s[1]][s[0]]=0
+
+        v=[]
+
         while True:
-            
-            value=9997
-            
-            #find min in distance_grid
-            
-            for k in range(len(distance_grid)):
-                for j in range(len(distance_grid[k])):
-                    current_cell_distance=distance_grid[k][j]
-                    if [current_cell_distance, j, k] not in visited and current_cell_distance<value:
-                        value=current_cell_distance
+
+            i=9997
+            #x,y=0,0
+            for k in range(len(dg)):
+                for j in range(len(dg[k])):
+                    if [dg[k][j],j,k] not in v and dg[k][j]<i:
+                        i=dg[k][j]
                         x,y=j,k
-            if value==9997:
+            if i==9997:
                 break
             else:
-                min_value_in_grid=[value, x, y]
-            #push min in visited
+                a=[i,x,y]
+            #find min in dg
+            #remove min from q and push min in visited
+                v.append(a)
+                b1=[0,-1],[0,1],[1,0],[-1,0]
+                #check distances to the left, right, up and down of min which are
+            # pos and not walls and in grid, if  min's d +1 is lesser than their
+            #current d then update value in dg
+                for b in b1:
+                    ##a=[0,2,3]        b=[0,1]
+                    x2=a[1]+b[0]
+                    y2=a[2] +b[1]
+                    if (a[1]+b[0]) >=0 and (a[2] +b[1]) >=0 and (a[2] +b[1]) < len(dg) and (a[1] +b[0]) < len(dg[0]):
+                        if dg[y2][x2] != 9999:
+                            if (a[0]+1)<dg[y2][x2]:
+                                dg[y2][x2]=a[0]+1
+                            #    print(dg)
 
-                visited.append(min_value_in_grid)
-                neighbors_4=[0,-1],[0,1],[1,0],[-1,0]
-            #check distances to the left, right, up and down of min which are
-            # pos and not walls and in grid, if  new value (which is the min_value_in_grid's value +1) is lesser than their
-            #current d then update new value in distance_grid
-                for b in neighbors_4:
-                    x2=min_value_in_grid[1]+b[0]
-                    y2=min_value_in_grid[2] +b[1]
-                    if (x2) >=0 and (y2) >=0 and (y2) < len(distance_grid) and (x2) < len(distance_grid[0]): #ie positive and in grid
-                        if distance_grid[y2][x2] != 9999:        #ie not a wall
-                            new_distance_of_neighbor=min_value_in_grid[0]+1 
-                            old_distance_of_neighbor=distance_grid[y2][x2]
-                            if new_distance_of_neighbor<old_distance_of_neighbor:
-                                old_distance_of_neighbor=new_distance_of_neighbor
-        print(distance_grid)
-        path=[target]
-        while target != start:
-            next_cell_to_append_in_path=distance_grid[target[1]][target[0]]-1
-            #print(next_cell_to_append_in_path)
-            for k in range(len(distance_grid)):
-                for j in range(len(distance_grid[k])):
-                    if distance_grid[k][j]==next_cell_to_append_in_path:
+
+
+        path=[t]
+
+        while t != s:
+           # print(dg[t[1]][t[0]])
+            p=dg[t[1]][t[0]]-1
+            for k in range(len(dg)):
+                for j in range(len(dg[k])):
+                    if dg[k][j]==p:
                         break
-                if distance_grid[k][j]==next_cell_to_append_in_path:
-                    target=[j,k]
-                    path.insert(0,target)
+                if dg[k][j]==p:
+                    t=[j,k]
+                    path.insert(0,t)
+
                     break
-        print(path)
+
         return path        
