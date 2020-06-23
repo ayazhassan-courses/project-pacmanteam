@@ -16,7 +16,7 @@ class Game:
         self.cellWidthHalf = self.cellWidth // 2
         self.cellHeightHalf = self.cellHeight // 2 
 
-        self.player = Player(self, PLAYER_START_POS)
+        self.player = None
 
         self.walls = []
 
@@ -60,7 +60,8 @@ class Game:
                         self.ghostpos.append(vec(x, y))
                     elif char == 'B':
                         pygame.draw.rect(self.background, BLACK, (x * self.cellWidth, y * self.cellHeight,self.cellWidth, self.cellHeight))
-
+                    elif (char == 'P'):
+                        self.player = Player(self, vec(x, y))
 
     def make_ghosts(self):             
         for index, pos in enumerate(self.ghostpos):
