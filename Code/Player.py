@@ -12,7 +12,9 @@ class Player:
 		self.gridPos = startPos		
 		self.pixPos = self.GetPixPos()
 		self.direction = vec(1, 0)
-		self.storedDirection = None
+		# new
+		self.storedDirection = self.direction
+		# new
 		self.radius = self.game.cellWidth // 2 - 2
 		self.speed = 1
 		self.canMove = True
@@ -21,8 +23,13 @@ class Player:
 
 		if (self.canMove):
 			self.pixPos += self.direction * self.speed
-			self.gridPos.x = self.pixPos.x // self.game.cellWidth 
-			self.gridPos.y = self.pixPos.y // self.game.cellHeight 
+			# new
+			topLeftCorner = vec(self.pixPos.x - self.game.cellWidthHalf, self.pixPos.y - self.game.cellHeightHalf)
+			if ((topLeftCorner.x % self.game.cellWidth) == 0):
+				self.gridPos.x = topLeftCorner.x // self.game.cellWidth 
+			if ((topLeftCorner.y % self.game.cellHeight) == 0):
+				self.gridPos.y = topLeftCorner.y // self.game.cellHeight
+			# new
 
 		if (self.CanTurn()):
 			self.direction = self.storedDirection

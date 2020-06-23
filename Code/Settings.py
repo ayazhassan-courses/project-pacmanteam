@@ -13,6 +13,7 @@ GREY = (107, 107, 107)
 WHITE = (255,255,255)
 PURPLE = (112, 55, 163)
 PLAYER_COLOUR = (190, 194, 15)
+COIN_COLOUR = (100, 86, 35)
 
 # player settings
 PLAYER_START_POS = vec(1, 1)
