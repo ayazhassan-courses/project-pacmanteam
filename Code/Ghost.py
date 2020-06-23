@@ -1,9 +1,10 @@
 # Ghost.py
+
 import pygame, math
 from Settings import *
-from Game import *
+
 pygame.init()
-vec = pygame.math.Vector2
+
 
 class Ghost:
     def __init__(self, game, starting_pos, number):
@@ -64,6 +65,7 @@ class Ghost:
             return "random"
         else:
             return "scared"
+    
     def set_target(self):
 ##        if self.game.player.gridPos[0] > 28//2 and self.game.player.gridPos[1] > 31//2:
 ##            return vec(1, 1)
@@ -154,5 +156,5 @@ class Ghost:
 
                     break
                     
-        print(dg)
+        # print(dg)
         return path        
