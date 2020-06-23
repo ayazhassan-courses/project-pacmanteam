@@ -4,7 +4,6 @@ import pygame
 from Settings import *
 
 pygame.init()
-vec = pygame.math.Vector2
 
 class Player:
 	def __init__(self, game, startPos):

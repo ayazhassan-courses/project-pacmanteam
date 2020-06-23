@@ -1,3 +1,5 @@
+# Game.py
+
 import sys
 from Player import *
 from Ghost import * 

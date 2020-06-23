@@ -1,24 +1,24 @@
 # Ghost.py
+
 import pygame, math
 from Settings import *
-from Game import *
+
 pygame.init()
-vec = pygame.math.Vector2
 
 class Ghost:
     def __init__(self, game, starting_pos, number):
         self.game = game
         self.starting_pos = starting_pos  # grid position
         self.pixel_pos = self.GetPixelPos()
-        self.number = number
+        # self.number = number
         self.ghostImg = self.create_Img()
-        self.direction = vec(0,1)
+        self.direction = vec(0,1) # ^
  #      self.personality = self.setPersonality()
         self.state = 'static'
         self.target = None
 
     def Update(self):
-        self.state = 'running'
+        self.state = 'running' # This needs to be fixed
         if self.state == 'running':
                 
             self.target = self.set_target()
@@ -27,12 +27,10 @@ class Ghost:
                 self.pixel_pos += self.direction
                 #print(self.starting_pos)
                 if self.time_to_move():
-                    self.direction =self.move(self.target)
+                    self.direction = self.move(self.target)
         # Setting grid position in reference to pix position
-        self.starting_pos[0] = (self.pixel_pos[0] +
-                            self.game.cellWidth//2)//self.game.cellWidth+1
-        self.starting_pos[1] = (self.pixel_pos[1] +
-                            self.game.cellHeight//2)//self.game.cellHeight+1
+        self.starting_pos[0] = self.pixel_pos[0] // self.game.cellWidth 
+        self.starting_pos[1] = self.pixel_pos[1] // self.game.cellHeight 
              
         
     def Draw(self):
@@ -90,7 +88,7 @@ class Ghost:
         path = self.Djisktra([int(self.starting_pos.x), int(self.starting_pos.y)],[int(target[0]),int(target[1])])
         p_x=  path[1][0] - self.starting_pos.x
         p_y=  path[1][1] - self.starting_pos.y 
-        #print(vec(p_x, p_y))
+        # print(vec(p_x, p_y))
         return vec(p_x, p_y)
 
     def Djisktra(self,s,t):
