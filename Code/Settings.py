@@ -1,6 +1,6 @@
 # Settings.py
 
-from pygame.math import Vector2 as vec
+from pygame.math import Vector2 as vec # [2]
 
 # screen settings
 WIDTH, HEIGHT = 560, 620
@@ -13,7 +13,7 @@ GREY = (107, 107, 107)
 WHITE = (255,255,255)
 PURPLE = (112, 55, 163)
 PLAYER_COLOUR = (190, 194, 15)
-COIN_COLOUR = (100, 86, 35)
+COIN_COLOUR = (100, 86, 35) 
 
 # player settings
 PLAYER_START_POS = vec(1, 1)
