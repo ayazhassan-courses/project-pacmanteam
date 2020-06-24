@@ -22,34 +22,28 @@ class Game:
 
         self.walls = []
 
-        # new
         self.coins = []
         self.remainingCoins = 0
-        # new
 
         self.ghosts = []
         self.ghostpos = []
         
         self.Load()
         
-        self.make_ghosts()
+        self.MakeGhosts()
 
     def Run(self):
         while self.running:
             if (self.state == "start"):
                 self.StartEvents()
-                # removed function
                 self.StartDraw()
             elif (self.state == "playing"):
                 self.PlayingEvents()
                 self.PlayingUpdate()
                 self.PlayingDraw()
-            # new
             elif (self.state == "game over"):
                 self.GameOverEvents()
-                # removed function
                 self.GameOverDraw()
-            # new
             else:
                 self.running = False
             self.clock.tick(FPS)
@@ -75,13 +69,11 @@ class Game:
                         pygame.draw.rect(self.background, BLACK, (x * self.cellWidth, y * self.cellHeight,self.cellWidth, self.cellHeight))
                     elif (char == 'P'):
                         self.player = Player(self, vec(x, y))
-                    # new 
                     elif (char == 'C'):
                         self.coins.append(vec(x,y))
                         self.remainingCoins += 1
-                    # new - map was also changed for this
 
-    def make_ghosts(self):             
+    def MakeGhosts(self):             
         for index, pos in enumerate(self.ghostpos):
             self.ghosts.append(Ghost(self, pos, index))  # add the Ghost class as elements into the ghosts list
 
@@ -99,7 +91,15 @@ class Game:
         # for wall in self.walls:
         # 	pygame.draw.rect(self.screen, PURPLE, (int(wall.x * self.cellWidth), int(wall.y * self.cellHeight), self.cellWidth, self.cellHeight))
 
-    # new
+    def GameOver(self):
+        if (self.remainingCoins <= 0):
+            return True
+
+        for ghost in self.ghosts:
+            if (ghost.foundPlayer):
+                return True
+
+        return False
 
     ########################## COIN FUNCTIONS ###########################
 
@@ -115,7 +115,6 @@ class Game:
     def DrawCoins(self):
         for coinPos in self.coins:
             pygame.draw.circle(self.screen, COIN_COLOUR, (int(coinPos.x * self.cellWidth) + self.cellWidthHalf, int(coinPos.y * self.cellHeight) + self.cellHeightHalf), 5)
-    # new
 
     ########################## INTRO FUNCTIONS ###########################
 
@@ -126,23 +125,18 @@ class Game:
             if ((event.type == pygame.KEYDOWN) and (pygame.K_SPACE)):
                 self.state = "playing"
 
-    # removed function
-
     def StartDraw(self):
         self.screen.fill(BLACK)
-        # new
         self.Text('PRESS SPACE BAR TO CONTINUE', self.screen, WHITE, 'arial', 22, ((WIDTH // 2 - 145, HEIGHT // 2)))
-        # new
         pygame.display.update()
 
     ######################### PLAYING FUNCTIONS ##########################
 
     def PlayingEvents(self):
-        # new
         # if (self.GameOver()): # This function will check for both collision and finished coins
-        if (self.remainingCoins <= 0):
+        if (self.GameOver()):
             self.state = "game over"
-        # new
+
         for event in pygame.event.get():
             if (event.type == pygame.QUIT):
                 self.running = False
@@ -160,23 +154,18 @@ class Game:
         self.player.Update()
         for ghost in self.ghosts:
             ghost.Update()
-        # new
+
         self.UpdateCoins()
-        # new
 
     def PlayingDraw(self):
         self.screen.blit(self.background, (0,0))
         self.DrawGuides() # remember to comment this out
-        # new
         self.DrawCoins()
-        # new 
         self.player.Draw() 
         for ghost in self.ghosts:
             ghost.Draw()
         pygame.display.update()
 
-
-    # new
     ######################### GAME OVER FUNCTIONS ##########################
 
     def GameOverEvents(self):
@@ -184,11 +173,7 @@ class Game:
             if ((event.type == pygame.QUIT) or ((event.type == pygame.KEYDOWN) and (pygame.K_SPACE))):
                 self.running = False
 
-    # removed function
-
     def GameOverDraw(self):
         self.screen.fill(BLACK)
         self.Text('GAME OVER', self.screen, RED, 'arial', 22, ((WIDTH // 2 - 55, HEIGHT // 2)))
         pygame.display.update()
-
-    # new

@@ -6,44 +6,40 @@ from Settings import *
 pygame.init()
 
 class Ghost:
-    def __init__(self, game, starting_pos, number):
+    def __init__(self, game, currentPos, number):
         self.game = game
-        self.starting_pos = starting_pos  # grid position
-        self.pixel_pos = self.GetPixelPos()
+        self.currentPos = currentPos  # grid position
+        self.pixPos = self.GetPixelPos()
         # self.number = number
-        self.ghostImg = self.create_Img()
-        self.direction = vec(0,1) # ^
- #      self.personality = self.setPersonality()
+        self.ghostImg = self.CreateImg()
+        self.direction = vec(0,-1) 
+        self.G = self.LoadGraph()
         self.state = 'static'
         self.target = None
+        self.foundPlayer = False
+        self.speed = 2
 
-    def Update(self):
-        self.state = 'running' # This needs to be fixed
-        if self.state == 'running':
-                
-            self.target = self.set_target()
-            
-            if self.target != self.starting_pos:
-                self.pixel_pos += self.direction
-                #print(self.starting_pos)
-                if self.time_to_move():
-                    self.direction = self.move(self.target)
-        # Setting grid position in reference to pix position
-        self.starting_pos[0] = self.pixel_pos[0] // self.game.cellWidth 
-        self.starting_pos[1] = self.pixel_pos[1] // self.game.cellHeight 
+    def Update(self):       
+        self.target = self.GetTarget()
+        
+        if (self.target != self.currentPos):
+            self.Move()
+            self.pixPos += self.direction * self.speed
+        else:
+            self.foundPlayer = True
+
+        self.currentPos.x = self.pixPos.x // self.game.cellWidth 
+        self.currentPos.y = self.pixPos.y // self.game.cellHeight 
              
         
     def Draw(self):
-        # pygame.draw.circle(self.game.screen,(232, 14, 100), (int(self.pixel_pos.x), int(self.pixel_pos.y)), 16)
-        self.game.screen.blit(self.ghostImg, (self.pixel_pos.x, self.pixel_pos.y))
-        # self.game.screen.blit(self.ghostImg, (self.starting_pos.x, self.starting_pos.y))
+        self.game.screen.blit(self.ghostImg, (self.pixPos.x, self.pixPos.y))
 
-    def GetPixelPos(
-            self):  # Returns the position of the Ghost's pixel from the centre of pixel, NOT from the top-left corner of the pixel
-        return vec((self.starting_pos.x * self.game.cellWidth),
-                   (self.starting_pos.y * self.game.cellHeight))
+    def GetPixelPos(self):  # Returns the position of the Ghost's pixel from the top-left corner of the pixel
+        return vec(int(self.currentPos.x * self.game.cellWidth),
+                   int(self.currentPos.y * self.game.cellHeight))
 
-    def create_Img(self):
+    def CreateImg(self):
         
 #        if self.number == 0:
         return pygame.image.load('ghost1.png')
@@ -53,104 +49,100 @@ class Ghost:
 ##            return pygame.image.load('ghost3.png')
 ##        elif self.number == 3:
 ##            return pygame.image.load('ghost4.png')
-
-##    def setPersonality(self):
-##        if self.number == 0:
-##            return "speed"
-##        elif self.number == 1:
-##            return "slow"
-##        elif self.number == 2:
-##            return "random"
-##        else:
-##            return "scared"
         
-    def set_target(self):
-##        if self.game.player.gridPos[0] > 28//2 and self.game.player.gridPos[1] > 31//2:
-##            return vec(1, 1)
-##        if self.game.player.gridPos[0] > 28//2 and self.game.player.gridPos[1] < 31//2:
-##            return vec(1, 31-2)
-##        if self.game.player.gridPos[0] < 28//2 and self.game.player.gridPos[1] > 31//2:
-##            return vec(28-2, 1)
-##        else:
-##            return vec(28-2, 31-2)
+    def GetTarget(self):
         return self.game.player.gridPos
-        
-    def time_to_move(self):
-        if int(self.pixel_pos.x) % self.game.cellWidth == 0:
-            if self.direction == vec(1, 0) or self.direction == vec(-1, 0) or self.direction == vec(0, 0):
-                return True
-        if int(self.pixel_pos.y) % self.game.cellHeight == 0:
-            if self.direction == vec(0, 1) or self.direction == vec(0, -1) or self.direction == vec(0, 0):
-                return True
+
+    # Graph helper functions
+
+    def LoadGraph(self):
+        G = {}
+
+        for y in range(31):
+            for x in range(28):
+                node = (x, y)
+                G[node] = []
+
+                if ((x > 0) and (vec(x - 1, y) not in self.game.walls)):
+                    G[node].append(((x - 1, y), 1))
+
+                if ((x < 27) and (vec(x + 1, y) not in self.game.walls)):
+                    G[node].append(((x + 1, y), 1))
+
+                if ((y > 0) and (vec(x, y - 1) not in self.game.walls)):
+                    G[node].append(((x, y - 1), 1))
+
+                if ((y < 30) and (vec(x, y + 1) not in self.game.walls)):
+                    G[node].append(((x, y + 1), 1))
+
+        return G
+
+
+    # Priority Queue helper functions
+
+    def IsEmpty(self, Q):
+        return (len(Q) == 0)
+
+    def Enqueue(self, Q, item):
+        Q.append(item)
+
+    def DMinDequeue(self, Q, dist):
+        lenq = len(Q)
+        minDist = float("inf")
+        minInd = 0
+
+        for i in range(lenq):
+            if (dist[Q[i]][1] < minDist):
+                minDist = dist[Q[i]][1]
+                minInd = i
+
+        return Q.pop(minInd)
+
+
+    def Dijkstra(self, sv, ev):
+        unvisitedQ = [sv]
+        visited = []
+        dist = {sv: [sv, 0]}
+
+        for node in self.G:
+            if (node != sv):
+                    dist[node] = [None, float("inf")]
+                    self.Enqueue(unvisitedQ, node)
+
+        while (not self.IsEmpty(unvisitedQ)):
+            current = self.DMinDequeue(unvisitedQ, dist)
+
+            for node2 in self.G[current]:
+                if (node2 not in visited):
+                    alt = dist[current][1] + node2[1]
+
+                    if (alt < dist[node2[0]][1]):  
+                        dist[node2[0]] = [current, alt]
+
+            visited.append(current)
+
+        child = ev
+        retLst = []
+
+        while (child != sv):
+            retLst.insert(0, child)
+            child = dist[child][0]
+            
+        return retLst
+
+    def CanTurn(self, direction):
+        if ((direction == vec(0, 1)) or (direction == vec(0, -1))):
+            return ((self.pixPos.x % self.game.cellWidth) == 0)
+        elif ((direction == vec(1, 0)) or (direction == vec(-1, 0))):
+            return ((self.pixPos.y % self.game.cellHeight) == 0)
         return False
-    
-    def move(self, target):
-        path = self.Djisktra([int(self.starting_pos.x), int(self.starting_pos.y)],[int(target[0]),int(target[1])])
-        p_x=  path[1][0] - self.starting_pos.x
-        p_y=  path[1][1] - self.starting_pos.y 
-        # print(vec(p_x, p_y))
-        return vec(p_x, p_y)
 
-    def Djisktra(self,s,t):
-    ##    grid = [[0 for x in range(28)] for x in range(30)]
-    ##        for cell in self.game.walls:
-    ##            if cell.x < 28 and cell.y < 30:
-    ##                grid[int(cell.y)][int(cell.x)] = 1
+    def Move(self):
+        sc = (self.currentPos.x, self.currentPos.y)
+        ec = (self.target.x, self.target.y)
+        path = self.Dijkstra(sc, ec)
+        
+        direction = vec(path[0][0] - self.currentPos.x, path[0][1] - self.currentPos.y)
 
-        dg = [[math.inf for x in range(28)] for x in range(30)]
-        for cell in self.game.walls:
-            if cell.x < 28 and cell.y < 30:
-                dg[int(cell.y)][int(cell.x)] = 9999
-
-        dg[s[1]][s[0]]=0
-
-        v=[]
-
-        while True:
-
-            i=9997
-            #x,y=0,0
-            for k in range(len(dg)):
-                for j in range(len(dg[k])):
-                    if [dg[k][j],j,k] not in v and dg[k][j]<i:
-                        i=dg[k][j]
-                        x,y=j,k
-            if i==9997:
-                break
-            else:
-                a=[i,x,y]
-            #find min in dg
-            #remove min from q and push min in visited
-                v.append(a)
-                b1=[0,-1],[0,1],[1,0],[-1,0]
-                #check distances to the left, right, up and down of min which are
-            # pos and not walls and in grid, if  min's d +1 is lesser than their
-            #current d then update value in dg
-                for b in b1:
-                    ##a=[0,2,3]        b=[0,1]
-                    x2=a[1]+b[0]
-                    y2=a[2] +b[1]
-                    if (a[1]+b[0]) >=0 and (a[2] +b[1]) >=0 and (a[2] +b[1]) < len(dg) and (a[1] +b[0]) < len(dg[0]):
-                        if dg[y2][x2] != 9999:
-                            if (a[0]+1)<dg[y2][x2]:
-                                dg[y2][x2]=a[0]+1
-                            #    print(dg)
-
-
-
-        path=[t]
-
-        while t != s:
-           # print(dg[t[1]][t[0]])
-            p=dg[t[1]][t[0]]-1
-            for k in range(len(dg)):
-                for j in range(len(dg[k])):
-                    if dg[k][j]==p:
-                        break
-                if dg[k][j]==p:
-                    t=[j,k]
-                    path.insert(0,t)
-
-                    break
-
-        return path        
+        if (self.CanTurn(direction)):
+            self.direction = direction
