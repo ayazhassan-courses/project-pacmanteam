@@ -6,16 +6,18 @@ from Settings import *
 pygame.init()
 
 class Ghost:
-    def __init__(self, game, currentPos, number):
+    def __init__(self, game, currentPos, id):
         self.game = game
         self.currentPos = currentPos  # grid position
         self.pixPos = self.GetPixelPos()
-        # self.number = number
+        self.id = id
+        # id = '2' => blue ghost
+        # id = '3' => red ghost
         self.ghostImg = self.CreateImg()
         self.direction = vec(0,-1) 
         self.G = self.LoadGraph()
         self.state = 'static'
-        self.target = None
+        self.target = self.GetTarget()
         self.foundPlayer = False
         self.speed = 2
 
@@ -40,15 +42,10 @@ class Ghost:
                    int(self.currentPos.y * self.game.cellHeight))
 
     def CreateImg(self):
-        
-#        if self.number == 0:
-        return pygame.image.load('ghost1.png')
-##        elif self.number == 1:
-##            return pygame.image.load('ghost2.png')
-##        elif self.number == 2:
-##            return pygame.image.load('ghost3.png')
-##        elif self.number == 3:
-##            return pygame.image.load('ghost4.png')
+        if self.id == '2':
+            return pygame.image.load('ghost1.png')
+        elif self.id == '3':
+            return pygame.image.load('ghost2.png')
         
     def GetTarget(self):
         return self.game.player.gridPos
@@ -77,6 +74,12 @@ class Ghost:
 
         return G
 
+    def Algorithm(self, sv, ev):
+        if (self.id == '2'):
+            return self.Dijkstra(sv, ev)
+        else:
+            return self.Dijkstra(sv, ev)
+            # return self.DFS(sv, ev)
 
     # Priority Queue helper functions
 
@@ -98,6 +101,7 @@ class Ghost:
 
         return Q.pop(minInd)
 
+    # Dijkstra
 
     def Dijkstra(self, sv, ev):
         unvisitedQ = [sv]
@@ -130,6 +134,41 @@ class Ghost:
             
         return retLst
 
+    # Stack helper functions
+
+    # IsEmpty is already here
+
+    def Top(S):
+        if (not IsEmpty(S)):
+            return S[-1]
+
+    def Pop(S):
+        if (not IsEmpty(S)):
+            return S.pop()
+
+    def Push(S, item):
+        S.append(item)
+
+    # DFS
+
+    def DFS(G, node):
+        S = [node]
+        V = [node]
+
+        while (not IsEmpty(S)):
+            neighbours = G[Top(S)]
+            i = 0
+            neighboursLen = len(neighbours)
+            while i <= neighboursLen:
+                if ((i < neighboursLen) and (neighbours[i] not in V)):
+                    Push(S, neighbours[i])
+                    V.append(neighbours[i])
+                    break
+                elif (i == neighboursLen):
+                    Pop(S)
+                i += 1
+        return V
+
     def CanTurn(self, direction):
         if ((direction == vec(0, 1)) or (direction == vec(0, -1))):
             return ((self.pixPos.x % self.game.cellWidth) == 0)
@@ -140,8 +179,8 @@ class Ghost:
     def Move(self):
         sc = (self.currentPos.x, self.currentPos.y)
         ec = (self.target.x, self.target.y)
-        path = self.Dijkstra(sc, ec)
-        
+        path = self.Algorithm(sc, ec)
+
         direction = vec(path[0][0] - self.currentPos.x, path[0][1] - self.currentPos.y)
 
         if (self.CanTurn(direction)):

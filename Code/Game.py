@@ -26,11 +26,8 @@ class Game:
         self.remainingCoins = 0
 
         self.ghosts = []
-        self.ghostpos = []
         
         self.Load()
-        
-        self.MakeGhosts()
 
     def Run(self):
         while self.running:
@@ -61,10 +58,8 @@ class Game:
                 for x, char in enumerate(line):
                     if (char == '1'):
                         self.walls.append(vec(x, y))
-                    ## elif (char in ['2', '3', '4', '5']):
-                        ## self.ghostpos.append(vec(x, y))
-                    elif (char == '2'):
-                        self.ghostpos.append(vec(x, y))
+                    elif (char in "23"):
+                        self.ghosts.append(Ghost(self, vec(x, y), char))
                     elif (char == 'B'):
                         pygame.draw.rect(self.background, BLACK, (x * self.cellWidth, y * self.cellHeight,self.cellWidth, self.cellHeight))
                     elif (char == 'P'):
@@ -72,10 +67,6 @@ class Game:
                     elif (char == 'C'):
                         self.coins.append(vec(x,y))
                         self.remainingCoins += 1
-
-    def MakeGhosts(self):             
-        for index, pos in enumerate(self.ghostpos):
-            self.ghosts.append(Ghost(self, pos, index))  # add the Ghost class as elements into the ghosts list
 
     def Text(self, text, screen, color, fonttype, size, pos):
         font = pygame.font.SysFont(fonttype, size)
