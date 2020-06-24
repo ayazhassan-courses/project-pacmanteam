@@ -59,20 +59,21 @@ class Ghost:
 
         for y in range(31):
             for x in range(28):
-                node = (x, y)
-                G[node] = []
+                if (vec(x, y) not in self.game.walls):
+                    node = (x, y)
+                    G[node] = []
 
-                if ((x > 0) and (vec(x - 1, y) not in self.game.walls)):
-                    G[node].append(((x - 1, y), 1))
+                    if ((x > 0) and (vec(x - 1, y) not in self.game.walls)):
+                        G[node].append(((x - 1, y), 1))
 
-                if ((x < 27) and (vec(x + 1, y) not in self.game.walls)):
-                    G[node].append(((x + 1, y), 1))
+                    if ((x < 27) and (vec(x + 1, y) not in self.game.walls)):
+                        G[node].append(((x + 1, y), 1))
 
-                if ((y > 0) and (vec(x, y - 1) not in self.game.walls)):
-                    G[node].append(((x, y - 1), 1))
+                    if ((y > 0) and (vec(x, y - 1) not in self.game.walls)):
+                        G[node].append(((x, y - 1), 1))
 
-                if ((y < 30) and (vec(x, y + 1) not in self.game.walls)):
-                    G[node].append(((x, y + 1), 1))
+                    if ((y < 30) and (vec(x, y + 1) not in self.game.walls)):
+                        G[node].append(((x, y + 1), 1))
 
         return G
 

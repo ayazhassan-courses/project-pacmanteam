@@ -53,7 +53,7 @@ class Game:
     def Load(self):
         self.background = pygame.image.load('maze2.png')
         self.background = pygame.transform.scale(self.background, (WIDTH, HEIGHT)) # To fatima: You don't actually need this line
-            
+
         with open("Maps.txt", 'r') as file:
             for y, line in enumerate(file):
                 for x, char in enumerate(line):
@@ -68,6 +68,7 @@ class Game:
                     elif (char == 'C'):
                         self.coins.append(vec(x,y))
                         self.remainingCoins += 1
+
     # [1]
 
     def Text(self, text, screen, color, fonttype, size, pos):
