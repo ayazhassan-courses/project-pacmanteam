@@ -1,11 +1,11 @@
 # Player.py
 
-import pygame #[2]
+import pygame # [2]
 from Settings import * 
 
 pygame.init()
 
-class Player:
+class Player: # Basic logic of making Player class is adapted from [1]
 	def __init__(self, game, startPos):
 		self.game = game
 		self.gridPos = startPos		
@@ -16,8 +16,7 @@ class Player:
 		self.speed = 2
 		self.canMove = True
 
-	def Update(self):
-
+	def Update(self): # Basic logic of making Update(self) is adapted from [1]
 		if (self.canMove):
 			self.pixPos += self.direction * self.speed 
 
@@ -30,25 +29,18 @@ class Player:
 		if (self.CanTurn()):
 			self.direction = self.storedDirection
 			self.canMove = self.CanMove() 
-			
-		## Basic logic of updating according to movability of Pacman, checking pixel position of Pacman from its topleftcorner
-		## and turning it accordingly in the right direction adapted by [1]
 
-	def Draw(self):
+	def Draw(self): # [1]
 		pygame.draw.circle(self.game.screen, PLAYER_COLOUR, (int(self.pixPos.x), int(self.pixPos.y)), self.radius)
 		pygame.draw.rect(self.game.screen, RED, (int(self.gridPos.x * self.game.cellWidth), int(self.gridPos.y * self.game.cellHeight), self.game.cellWidth, self.game.cellHeight), 1)
 		
-		## [1]
-		
-	def GetPixPos(self):  # Returns the position of the Player's pixel from the centre, NOT from the top-left corner of the pixel
+	def GetPixPos(self): # [1]
 		return vec(int(self.gridPos.x * self.game.cellWidth) + self.game.cellWidthHalf, int(self.gridPos.y * self.game.cellHeight) + self.game.cellHeightHalf)
 		
-		## Basic logic of drawing Pacman and adjusting to pixPos adapted by [1]
-		
-	def Move(self, direction):
+	def Move(self, direction): # [1]
 		self.storedDirection = direction
 		
-	def CanTurn(self):
+	def CanTurn(self): # [1]
 		if ((self.storedDirection == vec(0, 1)) or (self.storedDirection == vec(0, -1))):
 			return (((self.pixPos.x - self.game.cellWidthHalf) % self.game.cellWidth) == 0)
 		elif ((self.storedDirection == vec(1, 0)) or (self.storedDirection == vec(-1, 0))):
@@ -56,7 +48,5 @@ class Player:
 		return False
 		
 		
-	def CanMove(self):
+	def CanMove(self): # [1]
 		return (vec(self.gridPos + self.direction) not in self.game.walls)
-	
-		## Basic logic of checking turnability and avoiding walls by [1]

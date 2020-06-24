@@ -1,11 +1,11 @@
 # Ghost.py
 
-import pygame, math #[2]
+import pygame, math # [2],[4]
 from Settings import *
 
 pygame.init()
 
-class Ghost:
+class Ghost: # Basic logic of making Ghost class is adapted from [1]
     def __init__(self, game, currentPos, id):
         self.game = game
         self.currentPos = currentPos  # grid position
@@ -21,7 +21,7 @@ class Ghost:
         self.foundPlayer = False
         self.speed = 2
         
-    def Update(self):       
+    def Update(self): # Basic logic of making Update(self) is adapted from [1]       
         self.target = self.GetTarget()
         
         if (self.target != self.currentPos):
@@ -32,24 +32,21 @@ class Ghost:
 
         self.currentPos.x = self.pixPos.x // self.game.cellWidth 
         self.currentPos.y = self.pixPos.y // self.game.cellHeight 
-             
-        ## Basic logic of updating according to movability of ghost, checking pixel position of ghost from its topleftcorner
-		## and turning it accordingly in the right direction adapted by [1]
         
-    def Draw(self):
+    def Draw(self): # [1]
         self.game.screen.blit(self.ghostImg, (self.pixPos.x, self.pixPos.y))
 
-    def GetPixelPos(self):  # Returns the position of the Ghost's pixel from the top-left corner of the pixel
+    def GetPixelPos(self): # [1]
         return vec(int(self.currentPos.x * self.game.cellWidth),
                    int(self.currentPos.y * self.game.cellHeight))
 
-    def CreateImg(self):
+    def CreateImg(self): # Basic logic of making CreateImg(self) is adapted from [1]   
         if self.id == '2':
             return pygame.image.load('ghost1.png')
         elif self.id == '3':
             return pygame.image.load('ghost2.png')
         
-    def GetTarget(self):
+    def GetTarget(self): # [1]
         return self.game.player.gridPos
     
     # Graph helper functions
@@ -174,7 +171,7 @@ class Ghost:
 
         return stack
     
-    def CanTurn(self, direction):
+    def CanTurn(self, direction): # Basic logic of making CanTurn(self, direction) is adapted from [1] 
         if ((direction == vec(0, 1)) or (direction == vec(0, -1))):
             return ((self.pixPos.x % self.game.cellWidth) == 0)
         elif ((direction == vec(1, 0)) or (direction == vec(-1, 0))):
@@ -191,5 +188,5 @@ class Ghost:
         direction = vec(path[0][0] - self.currentPos.x, path[0][1] - self.currentPos.y)
 
         if (self.CanTurn(direction)):
-            self.direction = direction            ## Basic logic of updating direction from [1]
+            self.direction = direction            
         

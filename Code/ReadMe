@@ -10,7 +10,11 @@ In a comparative analysis to show Dijkstra is indeed taking the shortest route, 
 The project can be run on any editor, but preferably PyCharm as it is best suited for python libraries. Please run main.py.
 
 [1] External resource used: https://github.com/a-plus-coding/pacman-with-python
-This repository includes a PacMan game program using Python and the Pygame library. The basic logic on which our Pacman agent runs is adapted from this resource. 
+This repository includes a PacMan game program using Python and primarily Pygame library.
 
-[2]	Libraries used: pygame, sys, math
+[2]	pygame library - https://www.pygame.org/
+
+[3] sys library - https://docs.python.org/3/library/sys.html
+
+[4] math library - https://docs.python.org/3/library/math.html
 

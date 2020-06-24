@@ -1,7 +1,7 @@
 # main.py
   
-from Game import *
+from Game import * # [1]
 
-if (__name__ == "__main__"):
+if (__name__ == "__main__"): # [1]
 	app = Game()
 	app.Run()  

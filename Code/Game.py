@@ -1,12 +1,12 @@
 # Game.py
 
-import sys #[2]
+import sys # [3]
 from Player import * 
 from Ghost import * 
 
-class Game:
+class Game: # Basic logic of making Game class is adapted from [1]
 
-    def __init__(self):
+    def __init__(self): # Basic logic of making __Init__(self) is adapted from [1]
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
         self.running = True
@@ -29,7 +29,7 @@ class Game:
         
         self.Load()
 
-    def Run(self):
+    def Run(self): # Basic logic of making Run(self) is adapted from [1]
         while self.running:
             if (self.state == "start"):
                 self.StartEvents()
@@ -47,10 +47,9 @@ class Game:
         pygame.quit()
         sys.exit()
        
-    ## [1]
     ######################### HELPER FUNCTIONS ###########################
 
-    def Load(self):
+    def Load(self): # Basic logic of making Load(self) is adapted from [1]
         self.background = pygame.image.load('maze2.png')
         self.background = pygame.transform.scale(self.background, (WIDTH, HEIGHT)) # To fatima: You don't actually need this line
 
@@ -69,15 +68,12 @@ class Game:
                         self.coins.append(vec(x,y))
                         self.remainingCoins += 1
 
-    # [1]
-
-    def Text(self, text, screen, color, fonttype, size, pos):
+    def Text(self, text, screen, color, fonttype, size, pos): # [1]
         font = pygame.font.SysFont(fonttype, size)
         introText = font.render(text, False, color)
         screen.blit(introText, pos)
-    # [1]
     
-#    def DrawGuides(self):
+#    def DrawGuides(self): # [1]
 #        for x in range (WIDTH // self.cellWidth):
 #            pygame.draw.line(self.screen, GREY, (x * self.cellWidth, 0), (x * self.cellWidth, HEIGHT))
 #        for y in range (HEIGHT // self.cellHeight):
@@ -110,24 +106,21 @@ class Game:
 
     ########################## INTRO FUNCTIONS ###########################
 
-    def StartEvents(self):
+    def StartEvents(self): # [1]
         for event in pygame.event.get():
             if (event.type == pygame.QUIT):
                 self.running = False
             if ((event.type == pygame.KEYDOWN) and (pygame.K_SPACE)):
                 self.state = "playing"
 
-    def StartDraw(self):
+    def StartDraw(self): # [1]
         self.screen.fill(BLACK)
         self.Text('PRESS SPACE BAR TO CONTINUE', self.screen, WHITE, 'arial', 22, ((WIDTH // 2 - 145, HEIGHT // 2)))
         pygame.display.update()
         
-        
-        ## [1]
     ######################### PLAYING FUNCTIONS ##########################
 
-    def PlayingEvents(self):
-        # if (self.GameOver()): # This function will check for both collision and finished coins
+    def PlayingEvents(self): # Basic logic of making PlayingEvents(self) is adapted from [1]
         if (self.GameOver()):
             self.state = "game over"
 
@@ -144,22 +137,22 @@ class Game:
                 if (event.key == pygame.K_DOWN):
                     self.player.Move(vec(0, 1))
 
-    def PlayingUpdate(self):
+    def PlayingUpdate(self): # [1]
         self.player.Update()
         for ghost in self.ghosts:
             ghost.Update()
 
         self.UpdateCoins()
         
-    def PlayingDraw(self):
+    def PlayingDraw(self): # [1]
         self.screen.blit(self.background, (0,0))
-        # self.DrawGuides() # remember to comment this out
+        # self.DrawGuides() 
         self.DrawCoins()
         self.player.Draw() 
         for ghost in self.ghosts:
             ghost.Draw()
         pygame.display.update()
-        ## [1]
+
     ######################### GAME OVER FUNCTIONS ##########################
 
     def GameOverEvents(self):
