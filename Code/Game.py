@@ -26,7 +26,9 @@ class Game: # Basic logic of making Game class is adapted from [1]
         self.remainingCoins = 0
 
         self.ghosts = []
-        
+
+        self.doors = []
+
         self.Load()
 
     def Run(self): # Basic logic of making Run(self) is adapted from [1]
@@ -60,8 +62,8 @@ class Game: # Basic logic of making Game class is adapted from [1]
                         self.walls.append(vec(x, y))
                     elif (char in "2"):
                         self.ghosts.append(Ghost(self, vec(x, y), char))
-                    elif (char == 'B'):
-                        pygame.draw.rect(self.background, BLACK, (x * self.cellWidth, y * self.cellHeight,self.cellWidth, self.cellHeight))
+                    elif (char == 'D'):
+                        self.doors.append(vec(x, y))
                     elif (char == 'P'):
                         self.player = Player(self, vec(x, y))
                     elif (char == 'C'):
@@ -146,6 +148,8 @@ class Game: # Basic logic of making Game class is adapted from [1]
         
     def PlayingDraw(self): # [1]
         self.screen.blit(self.background, (0,0))
+        for door in self.doors:
+            pygame.draw.rect(self.background, BLACK, (door.x * self.cellWidth, door.y * self.cellHeight,self.cellWidth, self.cellHeight))
         # self.DrawGuides() 
         self.DrawCoins()
         self.player.Draw() 
