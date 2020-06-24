@@ -1,6 +1,6 @@
 # Ghost.py
 
-import pygame, math
+import pygame, math #[2]
 from Settings import *
 
 pygame.init()
@@ -20,7 +20,7 @@ class Ghost:
         self.target = self.GetTarget()
         self.foundPlayer = False
         self.speed = 2
-
+        
     def Update(self):       
         self.target = self.GetTarget()
         
@@ -33,6 +33,8 @@ class Ghost:
         self.currentPos.x = self.pixPos.x // self.game.cellWidth 
         self.currentPos.y = self.pixPos.y // self.game.cellHeight 
              
+        ## Basic logic of updating according to movability of ghost, checking pixel position of ghost from its topleftcorner
+		## and turning it accordingly in the right direction adapted by [1]
         
     def Draw(self):
         self.game.screen.blit(self.ghostImg, (self.pixPos.x, self.pixPos.y))
@@ -49,7 +51,7 @@ class Ghost:
         
     def GetTarget(self):
         return self.game.player.gridPos
-
+    
     # Graph helper functions
 
     def LoadGraph(self):
@@ -150,8 +152,8 @@ class Ghost:
         S.append(item)
 
     # DFS
-
-       def DFS(self, sv, ev):
+    
+    def DFS(self, sv, ev):
         stack = [sv]
         visited = []
 
@@ -176,6 +178,8 @@ class Ghost:
         elif ((direction == vec(1, 0)) or (direction == vec(-1, 0))):
             return ((self.pixPos.y % self.game.cellHeight) == 0)
         return False
+    
+        ## Basic logic of checking condition of movability adapted by [1]
 
     def Move(self):
         sc = (self.currentPos.x, self.currentPos.y)
@@ -185,4 +189,5 @@ class Ghost:
         direction = vec(path[0][0] - self.currentPos.x, path[0][1] - self.currentPos.y)
 
         if (self.CanTurn(direction)):
-            self.direction = direction
+            self.direction = direction            ## Basic logic of updating direction from [1]
+        
