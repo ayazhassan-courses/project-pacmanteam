@@ -58,7 +58,7 @@ class Game: # Basic logic of making Game class is adapted from [1]
                 for x, char in enumerate(line):
                     if (char == '1'):
                         self.walls.append(vec(x, y))
-                    elif (char in "23"):
+                    elif (char in "2"):
                         self.ghosts.append(Ghost(self, vec(x, y), char))
                     elif (char == 'B'):
                         pygame.draw.rect(self.background, BLACK, (x * self.cellWidth, y * self.cellHeight,self.cellWidth, self.cellHeight))

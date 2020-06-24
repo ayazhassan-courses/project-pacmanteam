@@ -10,7 +10,7 @@ class Ghost: # Basic logic of making Ghost class is adapted from [1]
         self.game = game
         self.currentPos = currentPos  # grid position
         self.pixPos = self.GetPixelPos()
-        self.id = id
+        # self.id = id
         # id = '2' => blue ghost
         # id = '3' => red ghost
         self.ghostImg = self.CreateImg()
@@ -41,10 +41,10 @@ class Ghost: # Basic logic of making Ghost class is adapted from [1]
                    int(self.currentPos.y * self.game.cellHeight))
 
     def CreateImg(self): # Basic logic of making CreateImg(self) is adapted from [1]   
-        if self.id == '2':
-            return pygame.image.load('ghost1.png')
-        elif self.id == '3':
-            return pygame.image.load('ghost2.png')
+        # if self.id == '2':
+        return pygame.image.load('ghost1.png')
+        # elif self.id == '3':
+        #     return pygame.image.load('ghost2.png')
         
     def GetTarget(self): # [1]
         return self.game.player.gridPos
@@ -74,13 +74,13 @@ class Ghost: # Basic logic of making Ghost class is adapted from [1]
 
         return G
 
-    def Algorithm(self, sv, ev):
-        if (self.id == '2'):
-            return self.Dijkstra(sv, ev)
-        else:
-            path = self.DFS(sv, ev)
-            path.pop(0)
-            return path
+    # def Algorithm(self, sv, ev):
+    #     if (self.id == '2'):
+    #         return self.Dijkstra(sv, ev)
+    #     else:
+    #         path = self.DFS(sv, ev)
+    #         path.pop(0)
+    #         return path
 
     # Priority Queue helper functions
 
@@ -139,37 +139,37 @@ class Ghost: # Basic logic of making Ghost class is adapted from [1]
 
     # IsEmpty is already here
 
-    def Top(self, S):
-        if (len(S) != 0):
-            return S[-1]
+    # def Top(self, S):
+    #     if (len(S) != 0):
+    #         return S[-1]
 
-    def Pop(self, S):
-        if (len(S) != 0):
-            return S.pop()
+    # def Pop(self, S):
+    #     if (len(S) != 0):
+    #         return S.pop()
 
-    def Push(self, S, item):
-        S.append(item)
+    # def Push(self, S, item):
+    #     S.append(item)
 
-    # DFS
+    # # DFS
     
-    def DFS(self, sv, ev):
-        stack = [sv]
-        visited = []
+    # def DFS(self, sv, ev):
+    #     stack = [sv]
+    #     visited = []
 
-        while ((not self.IsEmpty(stack)) and (self.Top(stack) != ev)):
-            neighbours = self.G[self.Top(stack)]
-            i = 0
-            neighboursLen = len(neighbours)
-            while i <= neighboursLen:
-                if ((i < neighboursLen) and (neighbours[i][0] not in visited)):
-                    self.Push(stack, neighbours[i][0])
-                    visited.append(neighbours[i][0])
-                    break
-                elif (i == neighboursLen):
-                    self.Pop(stack)
-                i += 1
+    #     while ((not self.IsEmpty(stack)) and (self.Top(stack) != ev)):
+    #         neighbours = self.G[self.Top(stack)]
+    #         i = 0
+    #         neighboursLen = len(neighbours)
+    #         while i <= neighboursLen:
+    #             if ((i < neighboursLen) and (neighbours[i][0] not in visited)):
+    #                 self.Push(stack, neighbours[i][0])
+    #                 visited.append(neighbours[i][0])
+    #                 break
+    #             elif (i == neighboursLen):
+    #                 self.Pop(stack)
+    #             i += 1
 
-        return stack
+    #     return stack
     
     def CanTurn(self, direction): # Basic logic of making CanTurn(self, direction) is adapted from [1] 
         if ((direction == vec(0, 1)) or (direction == vec(0, -1))):
@@ -183,7 +183,7 @@ class Ghost: # Basic logic of making Ghost class is adapted from [1]
     def Move(self):
         sc = (self.currentPos.x, self.currentPos.y)
         ec = (self.target.x, self.target.y)
-        path = self.Algorithm(sc, ec)
+        path = self.Dijkstra(sc, ec)
 
         direction = vec(path[0][0] - self.currentPos.x, path[0][1] - self.currentPos.y)
 
