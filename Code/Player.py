@@ -32,18 +32,18 @@ class Player:
 			self.canMove = self.CanMove() 
 			
 		## Basic logic of updating according to movability of Pacman, checking pixel position of Pacman from its topleftcorner
-		## and turning it accordingly in the right direction adapted by [2]
+		## and turning it accordingly in the right direction adapted by [1]
 
 	def Draw(self):
 		pygame.draw.circle(self.game.screen, PLAYER_COLOUR, (int(self.pixPos.x), int(self.pixPos.y)), self.radius)
 		pygame.draw.rect(self.game.screen, RED, (int(self.gridPos.x * self.game.cellWidth), int(self.gridPos.y * self.game.cellHeight), self.game.cellWidth, self.game.cellHeight), 1)
 		
-		## [2]
+		## [1]
 		
 	def GetPixPos(self):  # Returns the position of the Player's pixel from the centre, NOT from the top-left corner of the pixel
 		return vec(int(self.gridPos.x * self.game.cellWidth) + self.game.cellWidthHalf, int(self.gridPos.y * self.game.cellHeight) + self.game.cellHeightHalf)
 		
-		## Basic logic of drawing Pacman and adjusting to pixPos adapted by [2]
+		## Basic logic of drawing Pacman and adjusting to pixPos adapted by [1]
 		
 	def Move(self, direction):
 		self.storedDirection = direction
@@ -59,4 +59,4 @@ class Player:
 	def CanMove(self):
 		return (vec(self.gridPos + self.direction) not in self.game.walls)
 	
-		## Basic logic of checking turnability and avoiding walls by [2]
+		## Basic logic of checking turnability and avoiding walls by [1]
