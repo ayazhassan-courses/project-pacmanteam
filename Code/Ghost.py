@@ -80,8 +80,9 @@ class Ghost:
         if (self.id == '2'):
             return self.Dijkstra(sv, ev)
         else:
-            #return self.Dijkstra(sv, ev)
-            return self.DFS(sv, ev)
+            path = self.DFS(sv, ev)
+            path.pop(0)
+            return path
 
     # Priority Queue helper functions
 
@@ -140,15 +141,15 @@ class Ghost:
 
     # IsEmpty is already here
 
-    def Top(S):
-        if (not IsEmpty(S)):
+    def Top(self, S):
+        if (len(S) != 0):
             return S[-1]
 
-    def Pop(S):
-        if (not IsEmpty(S)):
+    def Pop(self, S):
+        if (len(S) != 0):
             return S.pop()
 
-    def Push(S, item):
+    def Push(self, S, item):
         S.append(item)
 
     # DFS
@@ -157,7 +158,7 @@ class Ghost:
         stack = [sv]
         visited = []
 
-        while (not self.IsEmpty(stack)) and self.Top(visited) != ev:
+        while ((not self.IsEmpty(stack)) and (self.Top(stack) != ev)):
             neighbours = self.G[self.Top(stack)]
             i = 0
             neighboursLen = len(neighbours)
@@ -169,8 +170,8 @@ class Ghost:
                 elif (i == neighboursLen):
                     self.Pop(stack)
                 i += 1
-        #visited.pop(0)
-        return visited
+
+        return stack
     
     def CanTurn(self, direction):
         if ((direction == vec(0, 1)) or (direction == vec(0, -1))):

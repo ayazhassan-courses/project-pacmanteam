@@ -152,7 +152,7 @@ class Game:
         
     def PlayingDraw(self):
         self.screen.blit(self.background, (0,0))
-        self.DrawGuides() # remember to comment this out
+        # self.DrawGuides() # remember to comment this out
         self.DrawCoins()
         self.player.Draw() 
         for ghost in self.ghosts:
