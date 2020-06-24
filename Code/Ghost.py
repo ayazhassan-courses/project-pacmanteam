@@ -78,8 +78,8 @@ class Ghost:
         if (self.id == '2'):
             return self.Dijkstra(sv, ev)
         else:
-            return self.Dijkstra(sv, ev)
-            # return self.DFS(sv, ev)
+            #return self.Dijkstra(sv, ev)
+            return self.DFS(sv, ev)
 
     # Priority Queue helper functions
 
@@ -151,24 +151,25 @@ class Ghost:
 
     # DFS
 
-    def DFS(G, node):
-        S = [node]
-        V = [node]
+       def DFS(self, sv, ev):
+        stack = [sv]
+        visited = []
 
-        while (not IsEmpty(S)):
-            neighbours = G[Top(S)]
+        while (not self.IsEmpty(stack)) and self.Top(visited) != ev:
+            neighbours = self.G[self.Top(stack)]
             i = 0
             neighboursLen = len(neighbours)
             while i <= neighboursLen:
-                if ((i < neighboursLen) and (neighbours[i] not in V)):
-                    Push(S, neighbours[i])
-                    V.append(neighbours[i])
+                if ((i < neighboursLen) and (neighbours[i][0] not in visited)):
+                    self.Push(stack, neighbours[i][0])
+                    visited.append(neighbours[i][0])
                     break
                 elif (i == neighboursLen):
-                    Pop(S)
+                    self.Pop(stack)
                 i += 1
-        return V
-
+        #visited.pop(0)
+        return visited
+    
     def CanTurn(self, direction):
         if ((direction == vec(0, 1)) or (direction == vec(0, -1))):
             return ((self.pixPos.x % self.game.cellWidth) == 0)
