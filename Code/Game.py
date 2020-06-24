@@ -1,7 +1,7 @@
 # Game.py
 
-import sys
-from Player import *
+import sys #[2]
+from Player import * 
 from Ghost import * 
 
 class Game:
@@ -46,7 +46,8 @@ class Game:
             self.clock.tick(FPS)
         pygame.quit()
         sys.exit()
-
+       
+    ## [1]
     ######################### HELPER FUNCTIONS ###########################
 
     def Load(self):
@@ -67,20 +68,19 @@ class Game:
                     elif (char == 'C'):
                         self.coins.append(vec(x,y))
                         self.remainingCoins += 1
+    # [1]
 
     def Text(self, text, screen, color, fonttype, size, pos):
         font = pygame.font.SysFont(fonttype, size)
         introText = font.render(text, False, color)
         screen.blit(introText, pos)
-
-    def DrawGuides(self):
-        for x in range (WIDTH // self.cellWidth):
-            pygame.draw.line(self.screen, GREY, (x * self.cellWidth, 0), (x * self.cellWidth, HEIGHT))
-        for y in range (HEIGHT // self.cellHeight):
-            pygame.draw.line(self.screen, GREY, (0, y * self.cellHeight), (WIDTH, y * self.cellHeight)) 
-
-        # for wall in self.walls:
-        # 	pygame.draw.rect(self.screen, PURPLE, (int(wall.x * self.cellWidth), int(wall.y * self.cellHeight), self.cellWidth, self.cellHeight))
+    # [1]
+    
+#    def DrawGuides(self):
+#        for x in range (WIDTH // self.cellWidth):
+#            pygame.draw.line(self.screen, GREY, (x * self.cellWidth, 0), (x * self.cellWidth, HEIGHT))
+#        for y in range (HEIGHT // self.cellHeight):
+#            pygame.draw.line(self.screen, GREY, (0, y * self.cellHeight), (WIDTH, y * self.cellHeight)) 
 
     def GameOver(self):
         if (self.remainingCoins <= 0):
@@ -120,7 +120,9 @@ class Game:
         self.screen.fill(BLACK)
         self.Text('PRESS SPACE BAR TO CONTINUE', self.screen, WHITE, 'arial', 22, ((WIDTH // 2 - 145, HEIGHT // 2)))
         pygame.display.update()
-
+        
+        
+        ## [1]
     ######################### PLAYING FUNCTIONS ##########################
 
     def PlayingEvents(self):
@@ -147,7 +149,7 @@ class Game:
             ghost.Update()
 
         self.UpdateCoins()
-
+        
     def PlayingDraw(self):
         self.screen.blit(self.background, (0,0))
         self.DrawGuides() # remember to comment this out
@@ -156,7 +158,7 @@ class Game:
         for ghost in self.ghosts:
             ghost.Draw()
         pygame.display.update()
-
+        ## [1]
     ######################### GAME OVER FUNCTIONS ##########################
 
     def GameOverEvents(self):
