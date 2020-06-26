@@ -6,7 +6,8 @@ from Settings import *
 pygame.init()
 
 class Ghost: # Basic logic of making Ghost class is adapted from [1]
-    def __init__(self, game, currentPos, id):
+    # def __init__(self, game, currentPos, id, G):
+    def __init__(self, game, currentPos, G):
         self.game = game
         self.currentPos = currentPos  # grid position
         self.pixPos = self.GetPixelPos()
@@ -15,11 +16,11 @@ class Ghost: # Basic logic of making Ghost class is adapted from [1]
         # id = '3' => red ghost
         self.ghostImg = self.CreateImg()
         self.direction = vec(0,-1) 
-        self.G = self.LoadGraph()
+        self.G = G
         self.state = 'static'
         self.target = self.GetTarget()
         self.foundPlayer = False
-        self.speed = 2
+        self.speed = 1
         
     def Update(self): # Basic logic of making Update(self) is adapted from [1]       
         self.target = self.GetTarget()
@@ -50,29 +51,6 @@ class Ghost: # Basic logic of making Ghost class is adapted from [1]
         return self.game.player.gridPos
     
     # Graph helper functions
-
-    def LoadGraph(self):
-        G = {}
-
-        for y in range(31):
-            for x in range(28):
-                if (vec(x, y) not in self.game.walls):
-                    node = (x, y)
-                    G[node] = []
-
-                    if ((x > 0) and (vec(x - 1, y) not in self.game.walls)):
-                        G[node].append(((x - 1, y), 1))
-
-                    if ((x < 27) and (vec(x + 1, y) not in self.game.walls)):
-                        G[node].append(((x + 1, y), 1))
-
-                    if ((y > 0) and (vec(x, y - 1) not in self.game.walls)):
-                        G[node].append(((x, y - 1), 1))
-
-                    if ((y < 30) and (vec(x, y + 1) not in self.game.walls)):
-                        G[node].append(((x, y + 1), 1))
-
-        return G
 
     # def Algorithm(self, sv, ev):
     #     if (self.id == '2'):

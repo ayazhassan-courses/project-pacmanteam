@@ -51,9 +51,34 @@ class Game: # Basic logic of making Game class is adapted from [1]
        
     ######################### HELPER FUNCTIONS ###########################
 
+    def LoadGraph(self):
+        G = {}
+
+        for y in range(31):
+            for x in range(28):
+                if (vec(x, y) not in self.walls):
+                    node = (x, y)
+                    G[node] = []
+
+                    if ((x > 0) and (vec(x - 1, y) not in self.walls)):
+                        G[node].append(((x - 1, y), 1))
+
+                    if ((x < 27) and (vec(x + 1, y) not in self.walls)):
+                        G[node].append(((x + 1, y), 1))
+
+                    if ((y > 0) and (vec(x, y - 1) not in self.walls)):
+                        G[node].append(((x, y - 1), 1))
+
+                    if ((y < 30) and (vec(x, y + 1) not in self.walls)):
+                        G[node].append(((x, y + 1), 1))
+
+        return G
+
     def Load(self): # Basic logic of making Load(self) is adapted from [1]
         self.background = pygame.image.load('maze2.png')
         self.background = pygame.transform.scale(self.background, (WIDTH, HEIGHT)) # To fatima: You don't actually need this line
+
+        enemyPos = []
 
         with open("Maps.txt", 'r') as file:
             for y, line in enumerate(file):
@@ -61,7 +86,8 @@ class Game: # Basic logic of making Game class is adapted from [1]
                     if (char == '1'):
                         self.walls.append(vec(x, y))
                     elif (char in "2"):
-                        self.ghosts.append(Ghost(self, vec(x, y), char))
+                        # enemyPos.append((vec(x, y), char))
+                        enemyPos.append(vec(x, y))
                     elif (char == 'D'):
                         self.doors.append(vec(x, y))
                     elif (char == 'P'):
@@ -69,6 +95,12 @@ class Game: # Basic logic of making Game class is adapted from [1]
                     elif (char == 'C'):
                         self.coins.append(vec(x,y))
                         self.remainingCoins += 1
+
+        G = self.LoadGraph()
+
+        for pos in enemyPos:
+            # self.ghosts.append(Ghost(self, pos[0], pos[1], G))
+            self.ghosts.append(Ghost(self, pos, G))
 
     def Text(self, text, screen, color, fonttype, size, pos): # [1]
         font = pygame.font.SysFont(fonttype, size)

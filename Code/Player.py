@@ -13,7 +13,7 @@ class Player: # Basic logic of making Player class is adapted from [1]
 		self.direction = vec(1, 0)
 		self.storedDirection = self.direction
 		self.radius = self.game.cellWidth // 2 - 2
-		self.speed = 2
+		self.speed = 1
 		self.canMove = True
 
 	def Update(self): # Basic logic of making Update(self) is adapted from [1]
